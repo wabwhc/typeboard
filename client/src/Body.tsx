@@ -13,17 +13,17 @@ interface article {
   article_at : string
 }
 
+
 function Body() {
 
   let [articles, setarticle] = useState([]);
   
 
-  let [sub, setsub] = useState<string>();
+  let [sub, setsub] = useState<string>("");
   let {subject} : sub|undefined = useParams()
   if(subject === undefined){
-    subject = 'all';
-  }
-  if(sub !== subject){
+    window.location.href = '/all'
+  }else if(sub !== subject){
     setsub(subject)
   }
 
@@ -33,7 +33,7 @@ function Body() {
     fetch('http://localhost:8080/'+ sub).then(e => {
       e.json().then( e => {
         if(e[0] === 'fail'){
-          window.location.href = '/'
+          window.location.href = '/all'
         }else{
           setarticle(e);
         }
