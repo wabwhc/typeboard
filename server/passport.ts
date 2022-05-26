@@ -3,14 +3,16 @@ import {Strategy as LocalStrategy} from 'passport-local';
 import {conn} from './mysqlconn';
 
 
-let User
+let User = {
+    userid :  '',
+}
 
 function test(){
     passport.use(new LocalStrategy({usernameField:'userid', passwordField: "password",session: true}, 
     (userid : string, password : string, done:Function) => {
         let sql : string = 'select * from users where userid = ?';
         conn.query(sql, [userid], (err, result : Array<any>, field) => {
-            User = {userid : userid}
+            User.userid = userid;
             if(result.length === 0){
                 return done(null, false, { message : '아이디가 다름' })
             }else{
@@ -24,10 +26,12 @@ function test(){
     }))
 
     passport.serializeUser((user, done) => {
+        console.log(132)
         done(null, user);
     })
 
     passport.deserializeUser((user : object | null | undefined, done) => {
+       console.log(user)
         done(null, user);
     })
 

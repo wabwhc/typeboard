@@ -4,10 +4,9 @@ import { conn } from './mysqlconn';
 import cors from 'cors';
 
 //------로그인 
-import passport  from 'passport'
+import passport from 'passport'
 import pass from './passport'
 import session  from 'express-session';
-import path from 'path';
 
 const app : express.Application = express();
 
@@ -18,19 +17,46 @@ app.use(session({
 
 app.use(passport.initialize()); // passport 구동
 app.use(passport.session()); // 세션 연결
-app.use(cors());
 
+app.use(
+    cors({
+         origin: "http://localhost:3000", // allow to server to accept request from different origin
+         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+         credentials: true, // allow session cookie from browser to pass through
+   })
+);
 pass();
 
+app.post('/isLogin', (req, res) => {
+    console.log(req.user);
+    res.send(req.user)
+})
+app.get('/logout', (req, res) => {
+    console.log(req.session)
+    req.session.destroy(() => {
+        res.send('h')
+    })
+})
 
-//app.get('/test' ,(req, res) =>{
-//    res.sendFile(path.join(__dirname, '../index.html'))
-//})
+app.post('/login', passport.authenticate('local', {
+    successRedirect: '/suc',
+    failureRedirect: '/fail',
+}))
 
-//app.post('/login', passport.authenticate('local', {
-//    successRedirect: '/',
-//    failureRedirect: '/test',
-//}))
+app.get('/suc', (req: Request, res : Response) => {
+    res.redirect('http://localhost:3000/all')
+})
+app.get('/fail', (req: Request, res : Response) => {
+    res.redirect('http://localhost:3000/login')
+})
+app.get('/article/:id', (req: Request, res : Response) => {
+    let id = req.params.id;
+    let sql : string = 'select * from articles where article_id = ?';
+    conn.query(sql, [id],(err, result, field) => {
+        res.send(result)
+    })
+})
+
 
 app.get('/subjects', (req: Request, res : Response) => {
     let sql : string = 'select * from subjects';
