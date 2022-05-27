@@ -7,8 +7,8 @@ function Login(){
         method:'post',
         credentials : 'include'
     }).then(e => {
-        e.text().then(e => {
-            if(e !== ""){
+        e.json().then(e => {
+            if(e.userid !== 'Anonymous'){
                 window.location.href = '/all'
             }else{
                 setisLog(true);
@@ -55,7 +55,7 @@ function Login(){
 
 
 
-                <form style={signstyle} action="http://localhost:8080/login" method="post">
+                <form style={signstyle} action="http://localhost:8080/signup" method="post">
                     <input id="id" name="userid"  placeholder="아이디"></input><br></br><br></br>
                     <input id="pw"  name="password" type="password"   placeholder="비밀번호"></input><br></br><br></br>
                     <button>회원가입</button>
