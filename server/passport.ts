@@ -11,11 +11,12 @@ function pass(){
     (userid : string, password : string, done:Function) => {
         let sql : string = 'select * from users where userid = ?';
         conn.query(sql, [userid], (err, result : Array<any>, field) => {
-            const user : User = {userid : userid}
+            
             if(result.length === 0){
                 return done(null, false, { message : '아이디가 다름' })
             }else{
                 if(result[0].password === password){
+                    const user : User = {userid : userid}
                     return done(null, user);
                 }else{
                     return done(null, false, { message : '비번이 다름' })

@@ -1,16 +1,16 @@
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 
 function Btn(){
     let parmas = useParams();
+
     return(
         <div style={{width:'70%', backgroundColor:'red', margin : 'auto'}}>
             {
                 Object.keys(parmas)[1] === 'subject'? 
-                <button>글작성</button>
+                <Link to={'/write/' + parmas.subject}><button>글작성</button></Link >
                 : Object.keys(parmas)[1] === 'id'?
                 <>
-                <button>삭제</button>
-                <button>수정</button>
+                    <button onClick={() => {fetch('http://localhost:8080/' + parmas.id, {method : 'delete'}).then(() => window.location.href = '/all')}}>삭제</button>
                 </>
                 :null
             }

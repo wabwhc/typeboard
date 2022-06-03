@@ -22,7 +22,7 @@ function Subjectlist(){
             {
                 subjects.length === 0 ? null
                 : subjects.map((sub : subject, index) => 
-                <Link to ={sub.subject} key={index}><h3>{sub.subject}</h3></Link>
+                <Link to ={'../../' + sub.subject} key={index}><h3>{sub.subject}</h3></Link>
                 )
             }
         </div>

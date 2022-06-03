@@ -4,7 +4,7 @@ function Login(){
     let [isLog, setisLog] = useState(false)
 
     fetch('http://localhost:8080/isLogin',{
-        method:'post',
+        method:'get',
         credentials : 'include'
     }).then(e => {
         e.json().then(e => {
